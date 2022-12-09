@@ -13,6 +13,15 @@ public class Booking {
     private Integer guests;
     private List<String> room; //Change type String to Room
 
+    public Booking() {
+    }
+    
+    public Booking(Integer bookingId, String customer, Integer guests, List<String> room) {
+        this.bookingId = bookingId;
+        this.customer = customer;
+        this.guests = guests;
+        this.room = room;
+    }
 
     public Integer getBookingId() {
         return bookingId;
