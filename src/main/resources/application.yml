@@ -1,0 +1,6 @@
+spring:
+  data:
+    mongodb:
+      database: demo
+      host: javamongo
+      post: 27017
