@@ -1,11 +1,19 @@
 package com.ooadproject.hotelmanagement.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "roomTypes")
 @Data
 public class RoomType {
+
+    @Id
+    @ApiModelProperty(readOnly = true)
     private String typeId;
     private String typeName;
     private int bedroom;

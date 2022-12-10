@@ -8,10 +8,12 @@ import java.util.List;
 
 public interface RoomTypeRepository extends MongoRepository<RoomType, String> {
 
-    List<RoomType> findByBedroom(int bedroom);
-
-    @Query("{'maxGuest' : { $lte : ?0 }}")
-    List<RoomType> getAllRoomTypeNotOverMaxGuest(int maxGuest);
-
-    List<RoomType> findByBedAmount(int bedAmount);
 }
+
+
+//    List<RoomType> findByBedroom(int bedroom);
+//
+//    @Query("{ maxGuest : { $lte : ?0 }}")
+//    List<RoomType> getAllRoomTypeNotOverMaxGuest(int maxGuest);
+//
+//    List<RoomType> findByBedAmount(int bedAmount);

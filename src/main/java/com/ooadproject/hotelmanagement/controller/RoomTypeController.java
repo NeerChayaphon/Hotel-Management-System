@@ -1,60 +1,53 @@
 package com.ooadproject.hotelmanagement.controller;
-
 import com.ooadproject.hotelmanagement.model.RoomType;
-import com.ooadproject.hotelmanagement.service.RoomTypeService;
+import com.ooadproject.hotelmanagement.repository.RoomTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
-@RequestMapping("/roomType")
+@RequestMapping("/roomTypes")
 public class RoomTypeController {
 
     @Autowired
-    private RoomTypeService roomTypeService;
+    private RoomTypeRepository roomTypeRepository;
 
-    // POST - Create new Room type
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public RoomType createRoomType(@RequestBody RoomType roomType){
-        return roomTypeService.addRoomType(roomType);
+        roomType.setTypeId(UUID.randomUUID().toString().split("-")[0]);
+        return roomTypeRepository.save(roomType);
     }
 
     @GetMapping
-    public List<RoomType> getAllRoomTypes(){
-        return roomTypeService.findAllRoomType();
+    public List<RoomType> getAllRoomTypes() {
+        return roomTypeRepository.findAll();
     }
 
-    @GetMapping("/{typeId}")
-    public RoomType getRoomType(@PathVariable String typeId){
-        return roomTypeService.getRoomTypeById(typeId);
+    @GetMapping("/{roomTypeId}")
+    public RoomType getTask(@PathVariable String roomTypeId){
+        return roomTypeRepository.findById(roomTypeId).get();
     }
 
-    @GetMapping("/bedroom/{bedroom}")
-    public List<RoomType> getRoomTypeByBedroom(@PathVariable int bedroom){
-        return roomTypeService.getRoomTypeByBedroom(bedroom);
+    @PutMapping("/{roomTypeId}")
+    public RoomType modifyRoomType(@RequestBody RoomType roomTypeRequest, @PathVariable String roomTypeId){
+        //get the existing document from DB
+        // populate new value from request to existing object/entity/document
+        RoomType existingRoomType = roomTypeRepository.findById(roomTypeId).get();
+        existingRoomType.setTypeName(roomTypeRequest.getTypeName());
+        existingRoomType.setRoomPrice(roomTypeRequest.getRoomPrice());
+        existingRoomType.setMaxGuest(roomTypeRequest.getMaxGuest());
+        existingRoomType.setBedAmount(roomTypeRequest.getBedAmount());
+        existingRoomType.setBedroom(roomTypeRequest.getBedroom());
+        return roomTypeRepository.save(existingRoomType);
     }
 
-    @GetMapping("/maxGuest/{maxGuest}")
-    public List<RoomType> getAllRoomTypeNotOverMaxGuest(@PathVariable int maxGuest){
-        return roomTypeService.getAllRoomTypeNotOverMaxGuest(maxGuest);
+    @DeleteMapping("/{roomTypeId}")
+    public String deleteRoomType(@PathVariable String roomTypeId){
+        roomTypeRepository.deleteById(roomTypeId);
+        return roomTypeId +" room type deleted from system ";
     }
-
-    @GetMapping("/bedAmount/{bedAmount}")
-    public List<RoomType> getRoomTypeByBed(@PathVariable int bedAmount){
-        return roomTypeService.getRoomTypeByBed(bedAmount);
-    }
-
-    @PutMapping
-    public RoomType modifyRoomType(@RequestBody RoomType roomType){
-        return roomTypeService.updateRoomType(roomType);
-    }
-
-    @DeleteMapping("/{typeId}")
-    public String  deleteRoomType(@PathVariable String typeId){
-        return roomTypeService.deleteRoomType(typeId);
-    }
-
 }

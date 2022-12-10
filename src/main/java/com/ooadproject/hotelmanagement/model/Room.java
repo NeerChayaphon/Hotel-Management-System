@@ -1,30 +1,46 @@
 package com.ooadproject.hotelmanagement.model;
 
 public class Room {
-    private Integer roomId;
-    private Integer roomFloor;
+    private String roomId;
+    private RoomType roomType;
+    private int roomFloor;
     private String roomBuilding;
-    private String roomType; //replace String by Roomtype
 
     public Room() {
     }
 
-    public Room(Integer roomId, Integer roomFloor, String roomBuilding, String roomType) {
+    public Room(String roomId, RoomType roomType, int roomFloor, String roomBuilding) {
         this.roomId = roomId;
+        this.roomType = roomType;
         this.roomFloor = roomFloor;
         this.roomBuilding = roomBuilding;
+    }
+
+    public String getRoomId() {
+        return roomId;
+    }
+
+    public RoomType getRoomType() {
+        return roomType;
+    }
+
+    public void setRoomType(RoomType roomType) {
         this.roomType = roomType;
     }
 
-    public Integer getRoomFloor() {
+    public int getRoomFloor() {
         return roomFloor;
+    }
+
+    public void setRoomFloor(int roomFloor) {
+        this.roomFloor = roomFloor;
     }
 
     public String getRoomBuilding() {
         return roomBuilding;
     }
 
-    public String getRoomType() {
-        return roomType;
+    public void setRoomBuilding(String roomBuilding) {
+        this.roomBuilding = roomBuilding;
     }
 }
