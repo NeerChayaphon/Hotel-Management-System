@@ -37,9 +37,9 @@ public class BookingController {
         //get the existing document from DB
         // populate new value from request to existing object/entity/document
         Booking existingBooking = bookingRepository.findById(bookingId).get();
-        existingBooking.setCustomer(bookingRequest.getCustomer());
+        existingBooking.setCustomerId(bookingRequest.getCustomerId());
         existingBooking.setGuestAmount(bookingRequest.getGuestAmount());
-        existingBooking.setRooms(bookingRequest.getRooms());
+        existingBooking.setRoomId(bookingRequest.getRoomId());
         existingBooking.setPaymentInfo(bookingRequest.getPaymentInfo());
         return bookingRepository.save(existingBooking);
     }
