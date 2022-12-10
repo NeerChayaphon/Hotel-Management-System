@@ -1,11 +1,16 @@
 package com.ooadproject.hotelmanagement.controller;
 import com.ooadproject.hotelmanagement.model.Booking;
+import com.ooadproject.hotelmanagement.model.Customer;
 import com.ooadproject.hotelmanagement.repository.BookingRepository;
+import com.ooadproject.hotelmanagement.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -14,12 +19,21 @@ public class BookingController {
 
     @Autowired
     private BookingRepository bookingRepository;
+    @Autowired
+    private CustomerRepository customerRepository;
+    private Optional<Customer> customer;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Booking createBooking(@RequestBody Booking booking){
         booking.setBookingId(UUID.randomUUID().toString().split("-")[0]);
-        return bookingRepository.save(booking);
+
+        customer = customerRepository.findById(booking.getCustomerId());
+        if (customer != null && customer.isPresent()) {
+            return bookingRepository.save(booking);
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer not found");
+        }
     }
 
      @GetMapping
