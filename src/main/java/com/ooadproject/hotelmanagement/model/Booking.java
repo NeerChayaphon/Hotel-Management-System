@@ -1,13 +1,19 @@
 package com.ooadproject.hotelmanagement.model;
 
-import lombok.Builder;
+
 import lombok.Data;
+import io.swagger.annotations.ApiModelProperty;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
+
+@Document(collection = "booking")
 @Data
-@Builder
 public class Booking {
+    @Id
+    @ApiModelProperty(readOnly = true)
     private String bookingId;
     private Customer customer;
     private int guestAmount;
