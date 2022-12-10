@@ -8,46 +8,60 @@ import java.util.List;
 @Data
 @Builder
 public class Booking {
-    private Integer bookingId;
-    private String customer; //Change type Sting to Customer
-    private Integer guests;
-    private List<String> room; //Change type String to Room
+    private String bookingId;
+    private Customer customer;
+    private int guestAmount;
+    private List<Room> rooms;
+    private PaymentInfo paymentInfo;
 
     public Booking() {
     }
-    
-    public Booking(Integer bookingId, String customer, Integer guests, List<String> room) {
+
+    public Booking(String bookingId, Customer customer, int guestAmount, List<Room> rooms, PaymentInfo paymentInfo) {
         this.bookingId = bookingId;
         this.customer = customer;
-        this.guests = guests;
-        this.room = room;
+        this.guestAmount = guestAmount;
+        this.rooms = rooms;
+        this.paymentInfo = paymentInfo;
     }
 
-    public Integer getBookingId() {
+    public String getBookingId() {
         return bookingId;
     }
 
-    public String getCustomer() {
+    public void setBookingId(String bookingId) {
+        this.bookingId = bookingId;
+    }
+
+    public Customer getCustomer() {
         return customer;
     }
 
-    public Integer getGuests() {
-        return guests;
-    }
-
-    public List<String> getRoom() {
-        return room;
-    }
-
-    public void setCustomer(String customer) {
+    public void setCustomer(Customer customer) {
         this.customer = customer;
     }
 
-    public void setGuests(Integer guests) {
-        this.guests = guests;
+    public int getGuestAmount() {
+        return guestAmount;
     }
 
-    public void setRoom(List<String> room) {
-        this.room = room;
+    public void setGuestAmount(int guestAmount) {
+        this.guestAmount = guestAmount;
+    }
+
+    public List<Room> getRooms() {
+        return rooms;
+    }
+
+    public void setRooms(List<Room> rooms) {
+        this.rooms = rooms;
+    }
+
+    public PaymentInfo getPaymentInfo() {
+        return paymentInfo;
+    }
+
+    public void setPaymentInfo(PaymentInfo paymentInfo) {
+        this.paymentInfo = paymentInfo;
     }
 }

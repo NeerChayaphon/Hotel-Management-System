@@ -1,6 +1,5 @@
 spring:
   data:
     mongodb:
-      database: demo
-      host: javamongo
-      post: 27017
+      url : mongodb+srv://admin:Q5UPtJutudzjZyy8@hotelmanagement.cegnm5z.mongodb.net/?retryWrites=true&w=majority
+      database : HotelManagment

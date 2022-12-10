@@ -2,13 +2,18 @@ package com.ooadproject.hotelmanagement.model;
 
 public class Staff extends User{
     private String position;
-    private Double salary;
+    private double salary;
 
-    public Staff(){
+    public Staff() {
     }
 
-    public Staff(String name, String email, String password, String phone, String position, Double salary) {
-        super(name, email, phone, password);
+    public Staff(String position, double salary) {
+        this.position = position;
+        this.salary = salary;
+    }
+
+    public Staff(String id, String name, String email, String password, String phone, String position, double salary) {
+        super(id, name, email, password, phone);
         this.position = position;
         this.salary = salary;
     }
@@ -17,15 +22,15 @@ public class Staff extends User{
         return position;
     }
 
-    public Double getSalary() {
-        return salary;
-    }
-
     public void setPosition(String position) {
         this.position = position;
     }
 
-    public void setSalary(Double salary) {
+    public double getSalary() {
+        return salary;
+    }
+
+    public void setSalary(double salary) {
         this.salary = salary;
     }
 }
