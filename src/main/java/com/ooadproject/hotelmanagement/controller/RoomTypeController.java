@@ -1,4 +1,5 @@
 package com.ooadproject.hotelmanagement.controller;
+
 import com.ooadproject.hotelmanagement.model.RoomType;
 import com.ooadproject.hotelmanagement.repository.RoomTypeRepository;
 import io.swagger.annotations.ApiOperation;
@@ -31,7 +32,7 @@ public class RoomTypeController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public RoomType createRoomType(@RequestBody RoomType roomType){
+    public RoomType createRoomType(@RequestBody RoomType roomType) {
         roomType.setTypeId(UUID.randomUUID().toString().split("-")[0]);
         return roomTypeRepository.save(roomType);
     }
@@ -42,13 +43,13 @@ public class RoomTypeController {
     }
 
     @GetMapping("/{roomTypeId}")
-    public RoomType getTask(@PathVariable String roomTypeId){
+    public RoomType getType(@PathVariable String roomTypeId) {
         return roomTypeRepository.findById(roomTypeId).get();
     }
 
     @PutMapping("/{roomTypeId}")
-    public RoomType modifyRoomType(@RequestBody RoomType roomTypeRequest, @PathVariable String roomTypeId){
-        //get the existing document from DB
+    public RoomType modifyRoomType(@RequestBody RoomType roomTypeRequest, @PathVariable String roomTypeId) {
+        // get the existing document from DB
         // populate new value from request to existing object/entity/document
         RoomType existingRoomType = roomTypeRepository.findById(roomTypeId).get();
         existingRoomType.setTypeName(roomTypeRequest.getTypeName());
@@ -60,9 +61,9 @@ public class RoomTypeController {
     }
 
     @DeleteMapping("/{roomTypeId}")
-    public String deleteRoomType(@PathVariable String roomTypeId){
+    public String deleteRoomType(@PathVariable String roomTypeId) {
         roomTypeRepository.deleteById(roomTypeId);
-        return roomTypeId +" room type deleted from system ";
+        return roomTypeId + " room type deleted from system ";
     }
 
     @GetMapping("/search")

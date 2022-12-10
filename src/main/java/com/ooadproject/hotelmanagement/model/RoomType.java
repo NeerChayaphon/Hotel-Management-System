@@ -1,10 +1,7 @@
 package com.ooadproject.hotelmanagement.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -20,7 +17,6 @@ public class RoomType {
     private int bedAmount;
     private int maxGuest;
     private double roomPrice;
-
 
     public RoomType() {
     }
