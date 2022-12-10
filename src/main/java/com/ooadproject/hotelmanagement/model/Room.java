@@ -1,17 +1,28 @@
 package com.ooadproject.hotelmanagement.model;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import nonapi.io.github.classgraph.json.Id;
+
+@Document(collection = "room")
+@Data
 public class Room {
+
+    @Id
+    @ApiModelProperty(readOnly = true)
     private String roomId;
-    private RoomType roomType;
+    private String roomTypeId;
     private int roomFloor;
     private String roomBuilding;
 
     public Room() {
     }
 
-    public Room(String roomId, RoomType roomType, int roomFloor, String roomBuilding) {
+    public Room(String roomId, String roomTypeId, int roomFloor, String roomBuilding) {
         this.roomId = roomId;
-        this.roomType = roomType;
+        this.roomTypeId = roomTypeId;
         this.roomFloor = roomFloor;
         this.roomBuilding = roomBuilding;
     }
@@ -20,12 +31,8 @@ public class Room {
         return roomId;
     }
 
-    public RoomType getRoomType() {
-        return roomType;
-    }
-
-    public void setRoomType(RoomType roomType) {
-        this.roomType = roomType;
+    public String getRoomTypeId() {
+        return roomTypeId;
     }
 
     public int getRoomFloor() {
