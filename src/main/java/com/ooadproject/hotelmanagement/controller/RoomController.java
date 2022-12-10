@@ -61,6 +61,12 @@ public class RoomController {
     return roomRepository.save(existedRoom);
   }
 
+  @DeleteMapping("/{roomId}")
+  public String deleteRoom(@PathVariable String roomId) {
+    roomRepository.deleteById(roomId);
+    return roomId + " room has been deleted";
+  }
+
   // Validate room type id to check if the type is existed
   private Boolean validateRoomTypeId(String roomTypeId) {
     roomType = roomTypeRepository.findById(roomTypeId);
