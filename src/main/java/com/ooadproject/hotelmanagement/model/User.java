@@ -1,6 +1,13 @@
 package com.ooadproject.hotelmanagement.model;
 
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import org.springframework.data.annotation.Id;
+
+@Data
 public class User {
+    @Id
+    @ApiModelProperty(readOnly = true)
     private String userId;
     private String name;
     private String email;
