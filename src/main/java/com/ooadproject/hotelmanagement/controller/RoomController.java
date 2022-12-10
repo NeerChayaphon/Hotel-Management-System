@@ -32,15 +32,9 @@ public class RoomController {
   @ResponseStatus(HttpStatus.CREATED)
   public Room createRoom(@RequestBody Room room) {
     room.setRoomId(UUID.randomUUID().toString().split("-")[0]);
+    validateRoomTypeId(room.getRoomTypeId());
 
-    roomType = roomTypeRepository.findById(room.getRoomTypeId());
-
-    if (roomType.isPresent() && roomType != null) {
-      return roomRepository.save(room);
-    } else {
-      throw new ResponseStatusException(
-          HttpStatus.NOT_FOUND, "room type not found");
-    }
+    return roomRepository.save(room);
   }
 
   @GetMapping
@@ -48,15 +42,35 @@ public class RoomController {
     return roomRepository.findAll();
   }
 
-  @GetMapping("/{rooomId}")
+  @GetMapping("/{roomId}")
   public Room getRoom(@PathVariable String roomId) {
     return roomRepository.findById(roomId).get();
   }
 
-  // @PutMapping("/{roomId}")
-  // public Room modifyRoom(@RequestBody Room roomRequest, @PathVariable String
-  // roomId) {
-  // Room existedRoom = roomRepository.findById(roomId).get();
-  // existedRoom.setRoom
-  // }
+  @PutMapping("/{roomId}")
+  public Room modifyRoom(@RequestBody Room roomRequest, @PathVariable String roomId) {
+    Room existedRoom = roomRepository.findById(roomId).get();
+
+    existedRoom.setRoomBuilding(roomRequest.getRoomBuilding());
+    existedRoom.setRoomFloor(roomRequest.getRoomFloor());
+
+    if (validateRoomTypeId(roomRequest.getRoomTypeId())) {
+      existedRoom.setRoomTypeId(roomRequest.getRoomTypeId());
+    }
+
+    return roomRepository.save(existedRoom);
+  }
+
+  // Validate room type id to check if the type is existed
+  private Boolean validateRoomTypeId(String roomTypeId) {
+    roomType = roomTypeRepository.findById(roomTypeId);
+
+    if (roomType.isPresent() && roomType != null) {
+      return true;
+    } else {
+      throw new ResponseStatusException(
+          HttpStatus.NOT_FOUND, "room type not found");
+    }
+  }
+
 }
