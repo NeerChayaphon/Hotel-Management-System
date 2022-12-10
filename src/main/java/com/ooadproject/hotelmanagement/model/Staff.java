@@ -1,5 +1,11 @@
 package com.ooadproject.hotelmanagement.model;
 
+
+import lombok.Data;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection = "staffs")
+@Data
 public class Staff extends User{
     private String position;
     private double salary;
