@@ -1,7 +1,12 @@
 package com.ooadproject.hotelmanagement.model;
 
+import lombok.Data;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.Date;
 
+@Document(collection = "customers")
+@Data
 public class Customer extends User{
     private Date signupDate;
 
