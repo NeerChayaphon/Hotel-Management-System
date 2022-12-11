@@ -1,19 +1,12 @@
 package com.ooadproject.hotelmanagement.controller;
-import com.ooadproject.hotelmanagement.model.Booking;
-import com.ooadproject.hotelmanagement.model.Customer;
-import com.ooadproject.hotelmanagement.model.Room;
-import com.ooadproject.hotelmanagement.repository.BookingRepository;
-import com.ooadproject.hotelmanagement.repository.CustomerRepository;
-import com.ooadproject.hotelmanagement.repository.RoomRepository;
+import com.ooadproject.hotelmanagement.model.*;
+import com.ooadproject.hotelmanagement.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @RequestMapping("/booking")
@@ -27,12 +20,15 @@ public class BookingController {
     @Autowired
     private RoomRepository roomRepository;
 
+    @Autowired
+    private RoomTypeRepository roomTypeRepository;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Booking createBooking(@RequestBody Booking booking){
         booking.setBookingId(UUID.randomUUID().toString().split("-")[0]);
         bookingValidation(booking.getCustomerId(),booking.getRoomId());
+        booking.setPaymentInfo(generatePaymentInfo(booking));
 
         return bookingRepository.save(booking);
 
@@ -69,6 +65,11 @@ public class BookingController {
         return bookingId +" booking deleted from system ";
     }
 
+//    @PostMapping("/testRoomPrice")
+//    public double testRoomPrice(@RequestBody Booking booking){
+//        return generatePaymentInfo(booking.getCheckIn(),booking.getCheckOut(),booking.getRoomId());
+//    }
+
     private void bookingValidation(String customerId, List<String> roomId){
         Optional<Customer> customer = customerRepository.findById(customerId);
 
@@ -82,6 +83,34 @@ public class BookingController {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Room not found");
             }
         }
+    }
+
+    private PaymentInfo generatePaymentInfo(Booking booking){
+        PaymentInfo paymentInfo = new PaymentInfo();
+        double totalRoomPrice = findRoomPrice(booking.getRoomId()) * calDayBetween(booking.getCheckOut(),booking.getCheckIn());
+
+        paymentInfo.setPaymentInfoId(UUID.randomUUID().toString().split("-")[0]);
+        paymentInfo.setPaymentComplete(false);
+        paymentInfo.setAmount(totalRoomPrice);
+        paymentInfo.setPaymentDate(null);
+
+        return paymentInfo;
+    }
+
+    private double findRoomPrice(List<String> roomIds){
+        double roomPrice = 0.0;
+        for (int i = 0; i < roomIds.size(); i++){
+            Room room = roomRepository.findById(roomIds.get(i)).get();
+            RoomType roomType = roomTypeRepository.findById(room.getRoomTypeId()).get();
+
+            roomPrice += roomType.getRoomPrice();
+        }
+        return roomPrice;
+    }
+
+    private long calDayBetween(Date checkIn, Date checkOut){
+        long difference = (checkOut.getTime() - checkIn.getTime()) / 86400000;
+        return Math.abs(difference);
     }
 
 }
