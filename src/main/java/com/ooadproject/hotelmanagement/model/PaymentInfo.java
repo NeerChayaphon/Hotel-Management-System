@@ -4,25 +4,29 @@ import java.util.Date;
 
 import lombok.Builder;
 import lombok.Data;
+import io.swagger.annotations.ApiModelProperty;
+import org.springframework.data.annotation.Id;
 
 @Data
 @Builder
 public class PaymentInfo {
+    @Id
+    @ApiModelProperty(readOnly = true)
     private String paymentInfoId;
-    private boolean paymentCompete;
+    private boolean paymentComplete;
     private Date paymentDate;
     private double amount;
-    private Staff verifyBy;
+    private String verifyByStaffId;
 
     public PaymentInfo() {
     }
 
-    public PaymentInfo(String paymentInfoId, boolean paymentCompete, Date paymentDate, double amount, Staff verifyBy) {
+    public PaymentInfo(String paymentInfoId, boolean paymentComplete, Date paymentDate, double amount, String verifyByStaffId) {
         this.paymentInfoId = paymentInfoId;
-        this.paymentCompete = paymentCompete;
+        this.paymentComplete = paymentComplete;
         this.paymentDate = paymentDate;
         this.amount = amount;
-        this.verifyBy = verifyBy;
+        this.verifyByStaffId = verifyByStaffId;
     }
 
     public String getPaymentInfoId() {
@@ -33,12 +37,12 @@ public class PaymentInfo {
         this.paymentInfoId = paymentInfoId;
     }
 
-    public boolean isPaymentCompete() {
-        return paymentCompete;
+    public boolean isPaymentComplete() {
+        return paymentComplete;
     }
 
-    public void setPaymentCompete(boolean paymentCompete) {
-        this.paymentCompete = paymentCompete;
+    public void setPaymentComplete(boolean paymentComplete) {
+        this.paymentComplete = paymentComplete;
     }
 
     public Date getPaymentDate() {
@@ -57,11 +61,11 @@ public class PaymentInfo {
         this.amount = amount;
     }
 
-    public Staff getVerifyBy() {
-        return verifyBy;
+    public String getVerifyByStaffId() {
+        return verifyByStaffId;
     }
 
-    public void setVerifyBy(Staff verifyBy) {
-        this.verifyBy = verifyBy;
+    public void setVerifyByStaffId(String verifyByStaffId) {
+        this.verifyByStaffId = verifyByStaffId;
     }
 }

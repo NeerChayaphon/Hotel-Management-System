@@ -15,19 +15,19 @@ public class Booking {
     @Id
     @ApiModelProperty(readOnly = true)
     private String bookingId;
-    private Customer customer;
+    private String customerId;
     private int guestAmount;
-    private List<Room> rooms;
+    private String roomId;
     private PaymentInfo paymentInfo;
 
     public Booking() {
     }
 
-    public Booking(String bookingId, Customer customer, int guestAmount, List<Room> rooms, PaymentInfo paymentInfo) {
+    public Booking(String bookingId, String customerId, int guestAmount, String roomId, PaymentInfo paymentInfo) {
         this.bookingId = bookingId;
-        this.customer = customer;
+        this.customerId = customerId;
         this.guestAmount = guestAmount;
-        this.rooms = rooms;
+        this.roomId = roomId;
         this.paymentInfo = paymentInfo;
     }
 
@@ -39,12 +39,12 @@ public class Booking {
         this.bookingId = bookingId;
     }
 
-    public Customer getCustomer() {
-        return customer;
+    public String getCustomerId() {
+        return customerId;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
     }
 
     public int getGuestAmount() {
@@ -55,12 +55,12 @@ public class Booking {
         this.guestAmount = guestAmount;
     }
 
-    public List<Room> getRooms() {
-        return rooms;
+    public String getRoomId() {
+        return roomId;
     }
 
-    public void setRooms(List<Room> rooms) {
-        this.rooms = rooms;
+    public void setRoomId(String roomId) {
+        this.roomId = roomId;
     }
 
     public PaymentInfo getPaymentInfo() {
