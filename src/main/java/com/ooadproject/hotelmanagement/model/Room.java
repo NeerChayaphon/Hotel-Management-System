@@ -50,4 +50,8 @@ public class Room {
     public void setRoomBuilding(String roomBuilding) {
         this.roomBuilding = roomBuilding;
     }
+
+    public void setRoomTypeId(String roomTypeId) {
+        this.roomTypeId = roomTypeId;
+    }
 }
