@@ -1,6 +1,12 @@
 package com.ooadproject.hotelmanagement.controller;
-import com.ooadproject.hotelmanagement.model.*;
-import com.ooadproject.hotelmanagement.repository.*;
+
+
+import com.ooadproject.hotelmanagement.model.Booking;
+import com.ooadproject.hotelmanagement.model.Customer;
+import com.ooadproject.hotelmanagement.model.Room;
+import com.ooadproject.hotelmanagement.repository.BookingRepository;
+import com.ooadproject.hotelmanagement.repository.CustomerRepository;
+import com.ooadproject.hotelmanagement.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -20,12 +26,14 @@ public class BookingController {
     @Autowired
     private RoomRepository roomRepository;
 
+
     @Autowired
     private RoomTypeRepository roomTypeRepository;
 
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Booking createBooking(@RequestBody Booking booking){
+    public Booking createBooking(@RequestBody Booking booking) {
         booking.setBookingId(UUID.randomUUID().toString().split("-")[0]);
         bookingValidation(booking.getCustomerId(),booking.getRoomId());
         booking.setPaymentInfo(generatePaymentInfo(booking));
@@ -34,23 +42,23 @@ public class BookingController {
 
     }
 
-     @GetMapping
-    public List<Booking> getAllRoomTypes() {
+    @GetMapping
+    public List<Booking> getAllBookings() {
         return bookingRepository.findAll();
     }
-    
+
     @GetMapping("/{bookingId}")
-    public Booking getTask(@PathVariable String bookingId){
+    public Booking getBooking(@PathVariable String bookingId) {
         return bookingRepository.findById(bookingId).get();
     }
-    
+
     @PutMapping("/{bookingId}")
-    public Booking modifyBooking(@RequestBody Booking bookingRequest, @PathVariable String bookingId){
-        //get the existing document from DB
+    public Booking modifyBooking(@RequestBody Booking bookingRequest, @PathVariable String bookingId) {
+        // get the existing document from DB
         // populate new value from request to existing object/entity/document
         Booking existingBooking = bookingRepository.findById(bookingId).get();
 
-        bookingValidation(bookingRequest.getCustomerId(),bookingRequest.getRoomId());
+        bookingValidation(bookingRequest.getCustomerId(), bookingRequest.getRoomId());
 
         existingBooking.setCustomerId(bookingRequest.getCustomerId());
         existingBooking.setGuestAmount(bookingRequest.getGuestAmount());
@@ -60,24 +68,21 @@ public class BookingController {
     }
 
     @DeleteMapping("/{bookingId}")
-    public String deleteBooking(@PathVariable String bookingId){
+    public String deleteBooking(@PathVariable String bookingId) {
         bookingRepository.deleteById(bookingId);
-        return bookingId +" booking deleted from system ";
+        return bookingId + " booking deleted from system ";
     }
 
-//    @PostMapping("/testRoomPrice")
-//    public double testRoomPrice(@RequestBody Booking booking){
-//        return generatePaymentInfo(booking.getCheckIn(),booking.getCheckOut(),booking.getRoomId());
-//    }
 
     private void bookingValidation(String customerId, List<String> roomId){
+
         Optional<Customer> customer = customerRepository.findById(customerId);
 
         if (customer == null || customer.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer not found");
         }
 
-        for (int i = 0; i < roomId.size(); i++){
+        for (int i = 0; i < roomId.size(); i++) {
             Optional<Room> room = roomRepository.findById(roomId.get(i));
             if (room == null || room.isEmpty()) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Room not found");
