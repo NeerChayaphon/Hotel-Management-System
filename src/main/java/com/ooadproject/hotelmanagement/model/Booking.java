@@ -1,13 +1,12 @@
 package com.ooadproject.hotelmanagement.model;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -21,21 +20,21 @@ public class Booking {
     private int guestAmount;
     private List<String> roomId;
 
-    private Date checkIn;
-    private Date checkOut;
+    private LocalDate checkInDate;
+    private LocalDate checkOutDate;
 
     private PaymentInfo paymentInfo;
 
     public Booking() {
     }
 
-    public Booking(String bookingId, String customerId, int guestAmount, List<String> roomId, Date checkIn, Date checkOut) {
+    public Booking(String bookingId, String customerId, int guestAmount, List<String> roomId, LocalDate checkInDate, LocalDate checkOutDate) {
         this.bookingId = bookingId;
         this.customerId = customerId;
         this.guestAmount = guestAmount;
         this.roomId = roomId;
-        this.checkIn = checkIn;
-        this.checkOut = checkOut;
+        this.checkInDate = checkInDate;
+        this.checkOutDate = checkOutDate;
     }
 
     public String getBookingId() {
@@ -70,20 +69,20 @@ public class Booking {
         this.roomId = roomId;
     }
 
-    public Date getCheckIn() {
-        return checkIn;
+    public LocalDate getCheckInDate() {
+        return checkInDate;
     }
 
-    public void setCheckIn(Date checkIn) {
-        this.checkIn = checkIn;
+    public void setCheckInDate(LocalDate checkInDate) {
+        this.checkInDate = checkInDate;
     }
 
-    public Date getCheckOut() {
-        return checkOut;
+    public LocalDate getCheckOutDate() {
+        return checkOutDate;
     }
 
-    public void setCheckOut(Date checkOut) {
-        this.checkOut = checkOut;
+    public void setCheckOutDate(LocalDate checkOutDate) {
+        this.checkOutDate = checkOutDate;
     }
 
     public PaymentInfo getPaymentInfo() {

@@ -54,8 +54,18 @@ public class UserController {
 
     @DeleteMapping("/customer/{customerId}")
     public String deleteCustomer(@PathVariable String customerId){
-        staffRepository.deleteById(customerId);
+        customerRepository.deleteById(customerId);
         return customerId +" customer deleted from system ";
+    }
+
+    @GetMapping("/customer/name")
+    public List<Customer> findByCustomerNameStartsWith(@RequestParam("name") String name) {
+        return customerRepository.findByNameStartsWith(name);
+    }
+
+    @GetMapping("/customer/email")
+    public List<Customer> findByCustomerEmail(@RequestParam("email") String email) {
+        return customerRepository.findByEmail(email);
     }
 
     // Staff - Controller section
@@ -94,5 +104,20 @@ public class UserController {
     public String deleteStaff(@PathVariable String staffId){
         staffRepository.deleteById(staffId);
         return staffId +" staff deleted from system ";
+    }
+
+    @GetMapping("/staff/name")
+    public List<Staff> findByStaffNameStartsWith(@RequestParam("name") String name) {
+        return staffRepository.findByNameStartsWith(name);
+    }
+
+    @GetMapping("/staff/email")
+    public List<Staff> findByStaffEmail(@RequestParam("email") String email) {
+        return staffRepository.findByEmail(email);
+    }
+
+    @GetMapping("/staff/position")
+    public List<Staff> findByPosition(@RequestParam("position") String position) {
+        return staffRepository.findByPosition(position);
     }
 }
