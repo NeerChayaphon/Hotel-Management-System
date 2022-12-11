@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiModelProperty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -19,17 +20,22 @@ public class Booking {
     private String customerId;
     private int guestAmount;
     private List<String> roomId;
-    @JsonIgnore
+
+    private Date checkIn;
+    private Date checkOut;
+
     private PaymentInfo paymentInfo;
 
     public Booking() {
     }
 
-    public Booking(String bookingId, String customerId, int guestAmount, List<String> roomId) {
+    public Booking(String bookingId, String customerId, int guestAmount, List<String> roomId, Date checkIn, Date checkOut) {
         this.bookingId = bookingId;
         this.customerId = customerId;
         this.guestAmount = guestAmount;
         this.roomId = roomId;
+        this.checkIn = checkIn;
+        this.checkOut = checkOut;
     }
 
     public String getBookingId() {
@@ -64,9 +70,26 @@ public class Booking {
         this.roomId = roomId;
     }
 
+    public Date getCheckIn() {
+        return checkIn;
+    }
+
+    public void setCheckIn(Date checkIn) {
+        this.checkIn = checkIn;
+    }
+
+    public Date getCheckOut() {
+        return checkOut;
+    }
+
+    public void setCheckOut(Date checkOut) {
+        this.checkOut = checkOut;
+    }
+
     public PaymentInfo getPaymentInfo() {
         return paymentInfo;
     }
+
 
     public void setPaymentInfo(PaymentInfo paymentInfoId) {
         this.paymentInfo = paymentInfoId;

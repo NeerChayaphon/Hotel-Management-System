@@ -16,17 +16,15 @@ public class PaymentInfo {
     private boolean paymentComplete;
     private Date paymentDate;
     private double amount;
-    private String verifyByStaffId;
 
     public PaymentInfo() {
     }
 
-    public PaymentInfo(String paymentInfoId, boolean paymentComplete, Date paymentDate, double amount, String verifyByStaffId) {
+    public PaymentInfo(String paymentInfoId, boolean paymentComplete, Date paymentDate, double amount) {
         this.paymentInfoId = paymentInfoId;
         this.paymentComplete = paymentComplete;
         this.paymentDate = paymentDate;
         this.amount = amount;
-        this.verifyByStaffId = verifyByStaffId;
     }
 
     public String getPaymentInfoId() {
@@ -59,13 +57,5 @@ public class PaymentInfo {
 
     public void setAmount(double amount) {
         this.amount = amount;
-    }
-
-    public String getVerifyByStaffId() {
-        return verifyByStaffId;
-    }
-
-    public void setVerifyByStaffId(String verifyByStaffId) {
-        this.verifyByStaffId = verifyByStaffId;
     }
 }
