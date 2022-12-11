@@ -1,8 +1,10 @@
 package com.ooadproject.hotelmanagement.controller;
 import com.ooadproject.hotelmanagement.model.Booking;
 import com.ooadproject.hotelmanagement.model.Customer;
+import com.ooadproject.hotelmanagement.model.Room;
 import com.ooadproject.hotelmanagement.repository.BookingRepository;
 import com.ooadproject.hotelmanagement.repository.CustomerRepository;
+import com.ooadproject.hotelmanagement.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -21,19 +23,19 @@ public class BookingController {
     private BookingRepository bookingRepository;
     @Autowired
     private CustomerRepository customerRepository;
-    private Optional<Customer> customer;
+
+    @Autowired
+    private RoomRepository roomRepository;
+
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Booking createBooking(@RequestBody Booking booking){
         booking.setBookingId(UUID.randomUUID().toString().split("-")[0]);
+        bookingValidation(booking.getCustomerId(),booking.getRoomId());
 
-        customer = customerRepository.findById(booking.getCustomerId());
-        if (customer != null && customer.isPresent()) {
-            return bookingRepository.save(booking);
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer not found");
-        }
+        return bookingRepository.save(booking);
+
     }
 
      @GetMapping
@@ -51,6 +53,9 @@ public class BookingController {
         //get the existing document from DB
         // populate new value from request to existing object/entity/document
         Booking existingBooking = bookingRepository.findById(bookingId).get();
+
+        bookingValidation(bookingRequest.getCustomerId(),bookingRequest.getRoomId());
+
         existingBooking.setCustomerId(bookingRequest.getCustomerId());
         existingBooking.setGuestAmount(bookingRequest.getGuestAmount());
         existingBooking.setRoomId(bookingRequest.getRoomId());
@@ -62,6 +67,21 @@ public class BookingController {
     public String deleteBooking(@PathVariable String bookingId){
         bookingRepository.deleteById(bookingId);
         return bookingId +" booking deleted from system ";
+    }
+
+    private void bookingValidation(String customerId, List<String> roomId){
+        Optional<Customer> customer = customerRepository.findById(customerId);
+
+        if (customer == null || customer.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer not found");
+        }
+
+        for (int i = 0; i < roomId.size(); i++){
+            Optional<Room> room = roomRepository.findById(roomId.get(i));
+            if (room == null || room.isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Room not found");
+            }
+        }
     }
 
 }

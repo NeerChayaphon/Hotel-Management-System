@@ -1,6 +1,7 @@
 package com.ooadproject.hotelmanagement.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.data.annotation.Id;
@@ -17,18 +18,18 @@ public class Booking {
     private String bookingId;
     private String customerId;
     private int guestAmount;
-    private String roomId;
+    private List<String> roomId;
+    @JsonIgnore
     private PaymentInfo paymentInfo;
 
     public Booking() {
     }
 
-    public Booking(String bookingId, String customerId, int guestAmount, String roomId, PaymentInfo paymentInfo) {
+    public Booking(String bookingId, String customerId, int guestAmount, List<String> roomId) {
         this.bookingId = bookingId;
         this.customerId = customerId;
         this.guestAmount = guestAmount;
         this.roomId = roomId;
-        this.paymentInfo = paymentInfo;
     }
 
     public String getBookingId() {
@@ -55,11 +56,11 @@ public class Booking {
         this.guestAmount = guestAmount;
     }
 
-    public String getRoomId() {
+    public List<String> getRoomId() {
         return roomId;
     }
 
-    public void setRoomId(String roomId) {
+    public void setRoomId(List<String> roomId) {
         this.roomId = roomId;
     }
 
@@ -67,7 +68,7 @@ public class Booking {
         return paymentInfo;
     }
 
-    public void setPaymentInfo(PaymentInfo paymentInfo) {
-        this.paymentInfo = paymentInfo;
+    public void setPaymentInfo(PaymentInfo paymentInfoId) {
+        this.paymentInfo = paymentInfoId;
     }
 }

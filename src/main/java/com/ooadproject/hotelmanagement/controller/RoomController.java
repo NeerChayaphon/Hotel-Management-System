@@ -26,7 +26,6 @@ public class RoomController {
 
   @Autowired
   private RoomTypeRepository roomTypeRepository;
-  private Optional<RoomType> roomType;
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
@@ -69,7 +68,7 @@ public class RoomController {
 
   // Validate room type id to check if the type is existed
   private Boolean validateRoomTypeId(String roomTypeId) {
-    roomType = roomTypeRepository.findById(roomTypeId);
+    Optional<RoomType> roomType = roomTypeRepository.findById(roomTypeId);
 
     if (roomType.isPresent() && roomType != null) {
       return true;
