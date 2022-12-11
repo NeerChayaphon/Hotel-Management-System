@@ -1,8 +1,10 @@
 package com.ooadproject.hotelmanagement.controller;
 import com.ooadproject.hotelmanagement.model.Booking;
 import com.ooadproject.hotelmanagement.model.Customer;
+import com.ooadproject.hotelmanagement.model.Room;
 import com.ooadproject.hotelmanagement.repository.BookingRepository;
 import com.ooadproject.hotelmanagement.repository.CustomerRepository;
+import com.ooadproject.hotelmanagement.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -21,19 +23,31 @@ public class BookingController {
     private BookingRepository bookingRepository;
     @Autowired
     private CustomerRepository customerRepository;
-    private Optional<Customer> customer;
+
+    @Autowired
+    private RoomRepository roomRepository;
+
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Booking createBooking(@RequestBody Booking booking){
         booking.setBookingId(UUID.randomUUID().toString().split("-")[0]);
 
-        customer = customerRepository.findById(booking.getCustomerId());
-        if (customer != null && customer.isPresent()) {
-            return bookingRepository.save(booking);
-        } else {
+        Optional<Customer> customer = customerRepository.findById(booking.getCustomerId());
+
+        if (customer == null || customer.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer not found");
         }
+
+        for (int i = 0; i < booking.getRoomId().size(); i++){
+            Optional<Room> room = roomRepository.findById(booking.getRoomId().get(i));
+            if (room == null || room.isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Room not found");
+            }
+        }
+
+        return bookingRepository.save(booking);
+
     }
 
      @GetMapping
