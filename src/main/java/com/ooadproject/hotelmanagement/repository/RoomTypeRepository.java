@@ -7,13 +7,8 @@ import org.springframework.data.mongodb.repository.Query;
 import java.util.List;
 
 public interface RoomTypeRepository extends MongoRepository<RoomType, String> {
-
+    List<RoomType> findByBedroom(int bedroom);
+    List<RoomType> findByBedAmount(int bedAmount);
+    List<RoomType> findByMaxGuest(int maxGuest);
+    List<RoomType> findByRoomPrice(int roomPrice);
 }
-
-
-//    List<RoomType> findByBedroom(int bedroom);
-//
-//    @Query("{ maxGuest : { $lte : ?0 }}")
-//    List<RoomType> getAllRoomTypeNotOverMaxGuest(int maxGuest);
-//
-//    List<RoomType> findByBedAmount(int bedAmount);

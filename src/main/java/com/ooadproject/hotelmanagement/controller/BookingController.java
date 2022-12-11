@@ -11,11 +11,16 @@ import com.ooadproject.hotelmanagement.repository.CustomerRepository;
 import com.ooadproject.hotelmanagement.repository.RoomRepository;
 import com.ooadproject.hotelmanagement.repository.RoomTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.*;
+import java.time.temporal.ChronoUnit;
 
 @RestController
 @RequestMapping("/booking")
@@ -29,9 +34,11 @@ public class BookingController {
     @Autowired
     private RoomRepository roomRepository;
 
-
     @Autowired
     private RoomTypeRepository roomTypeRepository;
+
+    @Autowired
+    private MongoTemplate mongoTemplate;
 
 
     @PostMapping
@@ -76,6 +83,62 @@ public class BookingController {
         return bookingId + " booking deleted from system ";
     }
 
+    @GetMapping("/customerId")
+    public List<Booking> findByCustomerId(@RequestParam("customerId") String customerId) {
+        return bookingRepository.findByCustomerId(customerId);
+    }
+
+    @GetMapping("/guestAmount")
+    public List<Booking> findByGuestAmount(@RequestParam("guestAmount") int guestAmount) {
+        return bookingRepository.findByGuestAmount(guestAmount);
+    }
+
+    @GetMapping("/checkInDate")
+    public List<Booking> findByCheckInDate(@RequestParam("checkInDate") String checkInDate) {
+        return bookingRepository.findByCheckInDate(LocalDate.parse(checkInDate));
+    }
+
+    @GetMapping("/checkOutDate")
+    public List<Booking> findByCheckOutDate(@RequestParam("checkOutDate") String checkOutDate) {
+        return bookingRepository.findByCheckOutDate(LocalDate.parse(checkOutDate));
+    }
+
+    @GetMapping("/search")
+    public List<Booking> searchBooking(
+            @RequestParam(required = false) String customerId,
+            @RequestParam(required = false) String guestAmount,
+            @RequestParam(required = false) String checkInDate,
+            @RequestParam(required = false) String checkOutDate
+    ){
+
+        Query query = new Query();
+        List<Criteria> criteria = new ArrayList<>();
+
+        if (customerId != null && !customerId.isEmpty()) {
+            criteria.add(Criteria.where("customerId").is(customerId));
+        }
+
+        if (guestAmount != null && !guestAmount.isEmpty()) {
+            criteria.add(Criteria.where("guestAmount").is(Integer.parseInt(guestAmount)));
+        }
+
+        if (checkInDate != null && !checkInDate.isEmpty()) {
+            criteria.add(Criteria.where("checkInDate").is(LocalDate.parse(checkInDate)));
+        }
+
+        if (checkOutDate != null && !checkOutDate.isEmpty()) {
+            criteria.add(Criteria.where("checkOutDate").is(LocalDate.parse(checkOutDate)));
+        }
+
+        if(!criteria.isEmpty()) {
+            query.addCriteria(new Criteria()
+                    .andOperator(criteria.toArray(new Criteria[0])));
+        }
+
+        return mongoTemplate.find(query,Booking.class);
+    }
+
+
 
     private void bookingValidation(String customerId, List<String> roomId){
 
@@ -95,7 +158,7 @@ public class BookingController {
 
     private PaymentInfo generatePaymentInfo(Booking booking){
         PaymentInfo paymentInfo = new PaymentInfo();
-        double totalRoomPrice = findRoomPrice(booking.getRoomId()) * calDayBetween(booking.getCheckOut(),booking.getCheckIn());
+        double totalRoomPrice = findRoomPrice(booking.getRoomId()) * calDayBetween(booking.getCheckOutDate(),booking.getCheckInDate());
 
         paymentInfo.setPaymentInfoId(UUID.randomUUID().toString().split("-")[0]);
         paymentInfo.setPaymentComplete(false);
@@ -116,9 +179,9 @@ public class BookingController {
         return roomPrice;
     }
 
-    private long calDayBetween(Date checkIn, Date checkOut){
-        long difference = (checkOut.getTime() - checkIn.getTime()) / 86400000;
-        return Math.abs(difference);
+    private long calDayBetween(LocalDate checkIn, LocalDate checkOut){
+        long difference = checkOut.until(checkIn,ChronoUnit.DAYS);
+        return difference;
     }
 
 }

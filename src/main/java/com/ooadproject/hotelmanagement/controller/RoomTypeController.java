@@ -1,5 +1,6 @@
 package com.ooadproject.hotelmanagement.controller;
 
+import com.ooadproject.hotelmanagement.model.Booking;
 import com.ooadproject.hotelmanagement.model.RoomType;
 import com.ooadproject.hotelmanagement.repository.RoomTypeRepository;
 import io.swagger.annotations.ApiOperation;
@@ -65,6 +66,28 @@ public class RoomTypeController {
         roomTypeRepository.deleteById(roomTypeId);
         return roomTypeId + " room type deleted from system ";
     }
+
+    @GetMapping("/bedroom")
+    public List<RoomType> findByBedroom(@RequestParam("bedroom") int bedroom) {
+        return roomTypeRepository.findByBedroom(bedroom);
+    }
+
+    @GetMapping("/bedAmount")
+    public List<RoomType> findByBedAmount(@RequestParam("bedAmount") int bedAmount) {
+        return roomTypeRepository.findByBedAmount(bedAmount);
+    }
+
+    @GetMapping("/maxGuest")
+    public List<RoomType> findByMaxGuest(@RequestParam("maxGuest") int maxGuest) {
+        return roomTypeRepository.findByMaxGuest(maxGuest);
+    }
+
+    @GetMapping("/roomPrice")
+    public List<RoomType> findByRoomPrice(@RequestParam("roomPrice") int roomPrice) {
+        return roomTypeRepository.findByRoomPrice(roomPrice);
+    }
+
+
 
     @GetMapping("/search")
     @ApiOperation(value = "Search room type",
