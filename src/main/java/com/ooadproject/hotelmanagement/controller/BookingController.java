@@ -2,11 +2,14 @@ package com.ooadproject.hotelmanagement.controller;
 
 
 import com.ooadproject.hotelmanagement.model.Booking;
+import com.ooadproject.hotelmanagement.model.RoomType;
+import com.ooadproject.hotelmanagement.model.PaymentInfo;
 import com.ooadproject.hotelmanagement.model.Customer;
 import com.ooadproject.hotelmanagement.model.Room;
 import com.ooadproject.hotelmanagement.repository.BookingRepository;
 import com.ooadproject.hotelmanagement.repository.CustomerRepository;
 import com.ooadproject.hotelmanagement.repository.RoomRepository;
+import com.ooadproject.hotelmanagement.repository.RoomTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
