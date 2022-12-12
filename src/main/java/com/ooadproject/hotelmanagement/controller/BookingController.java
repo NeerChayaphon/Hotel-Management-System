@@ -80,7 +80,18 @@ public class BookingController {
         existingBooking.setCustomerId(bookingRequest.getCustomerId());
         existingBooking.setGuestAmount(bookingRequest.getGuestAmount());
         existingBooking.setRoomId(bookingRequest.getRoomId());
-        existingBooking.setPaymentInfo(bookingRequest.getPaymentInfo());
+
+        Service extraService = new Service();
+        if (bookingRequest.getExtraService().getExtraBed() != 0){
+            extraService.setExtraBed(bookingRequest.getExtraService().getExtraBed());
+        }
+        if (bookingRequest.getExtraService().getBreakfast() != 0){
+            extraService.setBreakfast(bookingRequest.getExtraService().getBreakfast());
+        }
+
+        double extraServicePrice = extraService.totalServicePrice();
+        existingBooking.setPaymentInfo(generatePaymentInfo(bookingRequest,extraServicePrice));
+
         return bookingRepository.save(existingBooking);
     }
 
