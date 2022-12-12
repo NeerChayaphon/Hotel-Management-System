@@ -1,11 +1,7 @@
 package com.ooadproject.hotelmanagement.controller;
 
 
-import com.ooadproject.hotelmanagement.model.Booking;
-import com.ooadproject.hotelmanagement.model.RoomType;
-import com.ooadproject.hotelmanagement.model.PaymentInfo;
-import com.ooadproject.hotelmanagement.model.Customer;
-import com.ooadproject.hotelmanagement.model.Room;
+import com.ooadproject.hotelmanagement.model.*;
 import com.ooadproject.hotelmanagement.repository.BookingRepository;
 import com.ooadproject.hotelmanagement.repository.CustomerRepository;
 import com.ooadproject.hotelmanagement.repository.RoomRepository;
@@ -46,7 +42,18 @@ public class BookingController {
     public Booking createBooking(@RequestBody Booking booking) {
         booking.setBookingId(UUID.randomUUID().toString().split("-")[0]);
         bookingValidation(booking.getCustomerId(),booking.getRoomId());
-        booking.setPaymentInfo(generatePaymentInfo(booking));
+
+        Service extraService = new Service();
+        if (booking.getExtraService().getExtraBed() != 0){
+            extraService.setExtraBed(booking.getExtraService().getExtraBed());
+        }
+        if (booking.getExtraService().getBreakfast() != 0){
+            extraService.setBreakfast(booking.getExtraService().getBreakfast());
+        }
+
+        double extraServicePrice = extraService.totalServicePrice();
+
+        booking.setPaymentInfo(generatePaymentInfo(booking,extraServicePrice));
 
         return bookingRepository.save(booking);
 
@@ -73,7 +80,18 @@ public class BookingController {
         existingBooking.setCustomerId(bookingRequest.getCustomerId());
         existingBooking.setGuestAmount(bookingRequest.getGuestAmount());
         existingBooking.setRoomId(bookingRequest.getRoomId());
-        existingBooking.setPaymentInfo(bookingRequest.getPaymentInfo());
+
+        Service extraService = new Service();
+        if (bookingRequest.getExtraService().getExtraBed() != 0){
+            extraService.setExtraBed(bookingRequest.getExtraService().getExtraBed());
+        }
+        if (bookingRequest.getExtraService().getBreakfast() != 0){
+            extraService.setBreakfast(bookingRequest.getExtraService().getBreakfast());
+        }
+
+        double extraServicePrice = extraService.totalServicePrice();
+        existingBooking.setPaymentInfo(generatePaymentInfo(bookingRequest,extraServicePrice));
+
         return bookingRepository.save(existingBooking);
     }
 
@@ -156,13 +174,13 @@ public class BookingController {
         }
     }
 
-    private PaymentInfo generatePaymentInfo(Booking booking){
+    private PaymentInfo generatePaymentInfo(Booking booking, double extraPrice){
         PaymentInfo paymentInfo = new PaymentInfo();
         double totalRoomPrice = findRoomPrice(booking.getRoomId()) * calDayBetween(booking.getCheckOutDate(),booking.getCheckInDate());
 
         paymentInfo.setPaymentInfoId(UUID.randomUUID().toString().split("-")[0]);
         paymentInfo.setPaymentComplete(false);
-        paymentInfo.setAmount(totalRoomPrice);
+        paymentInfo.setAmount(totalRoomPrice + extraPrice);
         paymentInfo.setPaymentDate(null);
 
         return paymentInfo;
