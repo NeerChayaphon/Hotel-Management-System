@@ -13,10 +13,6 @@ public class Customer extends User{
     public Customer() {
     }
 
-    public Customer(Date signupDate) {
-        this.signupDate = signupDate;
-    }
-
     public Customer(String id, String name, String email, String password, String phone, Date signupDate) {
         super(id, name, email, password, phone);
         this.signupDate = signupDate;

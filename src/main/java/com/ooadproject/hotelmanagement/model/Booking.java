@@ -23,18 +23,21 @@ public class Booking {
     private LocalDate checkInDate;
     private LocalDate checkOutDate;
 
+    private Service extraService;
+
     private PaymentInfo paymentInfo;
 
     public Booking() {
     }
 
-    public Booking(String bookingId, String customerId, int guestAmount, List<String> roomId, LocalDate checkInDate, LocalDate checkOutDate) {
+    public Booking(String bookingId, String customerId, int guestAmount, List<String> roomId, LocalDate checkInDate, LocalDate checkOutDate, Service extraService) {
         this.bookingId = bookingId;
         this.customerId = customerId;
         this.guestAmount = guestAmount;
         this.roomId = roomId;
         this.checkInDate = checkInDate;
         this.checkOutDate = checkOutDate;
+        this.extraService = extraService;
     }
 
     public String getBookingId() {
@@ -92,5 +95,13 @@ public class Booking {
 
     public void setPaymentInfo(PaymentInfo paymentInfoId) {
         this.paymentInfo = paymentInfoId;
+    }
+
+    public Service getExtraService() {
+        return extraService;
+    }
+
+    public void setExtraService(Service extraService) {
+        this.extraService = extraService;
     }
 }
